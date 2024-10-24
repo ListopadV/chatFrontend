@@ -64,7 +64,10 @@ const Authentication: FC<AuthenticationProps> = ({ isLogin, isRegistration }) =>
                         "email": values.email,
                         "password": values.password
                     }, {
-                        withCredentials: true
+                        withCredentials: true,
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
                     }).then(response => {
                         dispatch(setAccessToken(response.data.access_token));
                     })
@@ -76,7 +79,10 @@ const Authentication: FC<AuthenticationProps> = ({ isLogin, isRegistration }) =>
         if (isRegistration) {
             try {
                 await axios.post(`${url}/users/registration`, values, {
-                        withCredentials: true
+                        withCredentials: true,
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
                     })
                 .then(response => {
                     dispatch(setAccessToken(response.data.access_token));
