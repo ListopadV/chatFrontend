@@ -24,8 +24,9 @@ export const fetchBots = (accessToken: string) => async (dispatch: AppDispatch) 
    try {
         await axios.get(`${url}/bots/motherfuckers`, {
         headers: {
-            Authorization: `Bearer ${accessToken}`
-        }
+            Authorization: `Bearer ${accessToken}`,
+        },
+            withCredentials: true
     }).then(response => {
         dispatch(setBots(response.data.bots));
     })

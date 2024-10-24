@@ -41,7 +41,8 @@ export const fetchMessages = (accessToken: string, chat_id: string, bot_id: stri
             Authorization: `Bearer ${accessToken}`,
             'X-chat-id': chat_id,
             'X-bot-id': bot_id
-        }
+        },
+            withCredentials: true
     }).then(response => {
         console.log(response.data.messages);
         dispatch(setMessages(response.data.messages));

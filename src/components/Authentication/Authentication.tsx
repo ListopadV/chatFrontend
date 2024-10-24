@@ -63,6 +63,8 @@ const Authentication: FC<AuthenticationProps> = ({ isLogin, isRegistration }) =>
                     await axios.post(`${url}/users/login`, {
                         "email": values.email,
                         "password": values.password
+                    }, {
+                        withCredentials: true
                     }).then(response => {
                         dispatch(setAccessToken(response.data.access_token));
                     })
@@ -73,7 +75,9 @@ const Authentication: FC<AuthenticationProps> = ({ isLogin, isRegistration }) =>
         }
         if (isRegistration) {
             try {
-                await axios.post(`${url}/users/registration`, values)
+                await axios.post(`${url}/users/registration`, values, {
+                        withCredentials: true
+                    })
                 .then(response => {
                     dispatch(setAccessToken(response.data.access_token));
                 })

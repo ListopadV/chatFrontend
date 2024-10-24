@@ -49,7 +49,8 @@ export const currentChat = (accessToken: string, chat_id: string) => async (disp
         const response = await axios.get(`${url}/chats/${chat_id}`, {
             headers: {
                 Authorization: `Bearer ${accessToken}`,
-            }
+            },
+            withCredentials: true
         });
         dispatch(setCurrentChat(response.data));
     } catch (error) {
@@ -62,7 +63,8 @@ export const fetchChats = (accessToken: string) => async (dispatch: AppDispatch)
         const response = await axios.get(`${url}/chats/user`, {
             headers: {
                 Authorization: `Bearer ${accessToken}`
-            }
+            },
+            withCredentials: true
         });
         dispatch(setChats(response.data));
     } catch (error) {
@@ -79,6 +81,7 @@ export const createChat = (accessToken: string, name: string, bot_id: string) =>
             headers: {
                 Authorization: `Bearer ${accessToken}`,
             },
+            withCredentials: true
         });
         dispatch(setCurrentChat({
             chat_id: response.data.chat_id,
@@ -101,7 +104,8 @@ export const deleteChat = (accessToken: string, chat_id: string) => async (dispa
             headers: {
                 Authorization: `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
-            }
+            },
+            withCredentials: true
         }).then(() => {
             dispatch(fetchChats(accessToken));
         })
@@ -133,7 +137,8 @@ export const askBot = (
                 'X-chat-id': chat_id,
                 'X-bot-id': bot_id,
                 Authorization: `Bearer ${accessToken}`
-            }
+            },
+            withCredentials: true
         });
         const bot_message = response.data.bot_message;
         const user_message = response.data.user_message;
