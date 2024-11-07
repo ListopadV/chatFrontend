@@ -50,7 +50,7 @@ export const currentChat = (accessToken: string, chat_id: string) => async (disp
             headers: {
                 Authorization: `Bearer ${accessToken}`,
             },
-            withCredentials: true
+            // withCredentials: true
         });
         dispatch(setCurrentChat(response.data));
     } catch (error) {
@@ -64,7 +64,7 @@ export const fetchChats = (accessToken: string) => async (dispatch: AppDispatch)
             headers: {
                 Authorization: `Bearer ${accessToken}`
             },
-            withCredentials: true
+            // withCredentials: true
         });
         dispatch(setChats(response.data));
     } catch (error) {
@@ -81,7 +81,7 @@ export const createChat = (accessToken: string, name: string, bot_id: string) =>
             headers: {
                 Authorization: `Bearer ${accessToken}`,
             },
-            withCredentials: true
+            // withCredentials: true
         });
         dispatch(setCurrentChat({
             chat_id: response.data.chat_id,
@@ -105,7 +105,7 @@ export const deleteChat = (accessToken: string, chat_id: string) => async (dispa
                 Authorization: `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
             },
-            withCredentials: true
+            // withCredentials: true
         }).then(() => {
             dispatch(fetchChats(accessToken));
         })
@@ -138,7 +138,7 @@ export const askBot = (
                 'X-bot-id': bot_id,
                 Authorization: `Bearer ${accessToken}`
             },
-            withCredentials: true
+            // withCredentials: true
         });
         const bot_message = response.data.bot_message;
         const user_message = response.data.user_message;
