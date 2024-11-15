@@ -44,7 +44,6 @@ export const fetchMessages = (accessToken: string, chat_id: string, bot_id: stri
         },
             // withCredentials: true
     }).then(response => {
-        console.log(response.data.messages);
         dispatch(setMessages(response.data.messages));
         if (response.data.messages.length > 0){
         const order = response.data.messages[response.data.messages.length  - 1].message_order;

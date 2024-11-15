@@ -12,9 +12,6 @@ const Message: FC<MessageProps> = ({ avatar, sender_type, message_order, text, c
     const typeByLetter = text.length < 250;
     const duration = text.length < 250 ? 8 : 4;
 
-    console.log(messageOrder);
-    console.log(message_order);
-
     return (
             <Box sx={{
           display: 'flex',

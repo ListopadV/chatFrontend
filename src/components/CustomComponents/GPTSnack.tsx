@@ -3,7 +3,7 @@ import { TransitionProps } from '@mui/material/transitions';import * as React fr
 import Fade from '@mui/material/Fade';
 import { Snackbar,IconButton, Button } from '@mui/material';
 
-export const GPTSnack: FC = ()  => {
+export const RequestSnack: FC = ()  => {
     const [state, setState] = React.useState<{
         open: boolean;
         Transition: React.ComponentType<
@@ -39,7 +39,7 @@ export const GPTSnack: FC = ()  => {
           TransitionComponent={state.Transition}
           message={
             <span style={{ fontSize: '0.875rem' }}>
-              * Requests to ChatGPT may not be sent due to Azure restrictions. Many users ask ChatGPT :))
+              * Requests might be sent with delay up to 1 minute, but deployment servers decide themselves :))
             </span>
           }
           key={state.Transition.name}

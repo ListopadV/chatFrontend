@@ -10,6 +10,7 @@ import {AppDispatch} from "../../store";
 import { styled } from '@mui/material/styles';
 import {AuthenticationProps, FormValues} from "../../types";
 import { url } from '../../variables';
+import {RequestSnack} from "../CustomComponents/GPTSnack";
 
 const CssTextField = styled(TextField)({
   '& label.Mui-focused': {
@@ -101,7 +102,8 @@ const Authentication: FC<AuthenticationProps> = ({ isLogin, isRegistration }) =>
     };
 
     return (
-        <Box sx={{
+       <>
+         <Box sx={{
             width: {
                 xs: '85vw',
                   sm: '85vw',
@@ -256,6 +258,9 @@ const Authentication: FC<AuthenticationProps> = ({ isLogin, isRegistration }) =>
                 )}
             </Formik>
         </Box>
+           <RequestSnack />
+       </>
+
     );
 };
 

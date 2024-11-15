@@ -134,6 +134,7 @@ const AddChat: FC = () => {
                                             width: '50px',
                                             height: '50px',
                                                     borderRadius: '50%',
+                                                    mt: '8px'
                                         }}  />
                                         <Typography sx={{ width: '50px', fontSize: '10px', pt: '12px' }}>{item.name}</Typography>
                                         <Typography sx={{ width: '50px', fontSize: '10px', pt: '2px' }}>{item.model}</Typography>

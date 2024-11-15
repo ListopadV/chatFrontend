@@ -11,7 +11,6 @@ import { useDebouncedCallback } from 'use-debounce';
 import { AppDispatch, RootState } from "../../store";
 import { askBot } from "../../redux/chatSlice";
 import { fetchMessages, clearMessages } from "../../redux/messagesSlice";
-import { GPTSnack } from "../CustomComponents/GPTSnack";
 import { Snack } from "../../types";
 import ErrorSnackbar from "../CustomComponents/ErrorSnackbar";
 
@@ -51,7 +50,6 @@ export const CurrentChat: FC = () => {
   useEffect(() => {
     if (messages.length > 0) {
       setMessageOrder(messages[messages.length - 1]['message_order']);
-      console.log(messages[messages.length - 1]['message_order'])
     }
   }, [messages]);
 
@@ -198,7 +196,6 @@ export const CurrentChat: FC = () => {
         </Box>
       </Box>
       {loading && <LinearProgress sx={{ position: 'absolute', top: 0, left: 0, right: 0 }} />}
-        {current_chat.bot_name === 'ChatGPT' && <GPTSnack />}
         <ErrorSnackbar snack={snack} setSnack={setSnack} />
     </Box>
   );
