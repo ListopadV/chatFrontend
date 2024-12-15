@@ -22,7 +22,7 @@ const botsSlice = createSlice({
 
 export const fetchBots = (accessToken: string) => async (dispatch: AppDispatch) => {
    try {
-        await axios.get(`${url}/bots/motherfuckers`, {
+        await axios.get(`${url}/bots/bots`, {
         headers: {
             Authorization: `Bearer ${accessToken}`,
         },

@@ -42,8 +42,16 @@ export const CurrentChat: FC = () => {
   };
 
   useEffect(() => {
-    if (current_chat.chat_id && current_chat.bot_id) {
-      dispatch(fetchMessages(accessToken, current_chat.chat_id, current_chat.bot_id));
+    try {
+        setLoading(true);
+      if (current_chat.chat_id && current_chat.bot_id) {
+        dispatch(fetchMessages(accessToken, current_chat.chat_id, current_chat.bot_id));
+      }
+    }catch (e){
+        console.error("Error: ", e);
+    }
+    finally {
+        setLoading(false);
     }
   }, [dispatch, accessToken, current_chat.chat_id, current_chat.bot_id]);
 

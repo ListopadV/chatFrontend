@@ -58,17 +58,22 @@ export const currentChat = (accessToken: string, chat_id: string) => async (disp
     }
 }
 
-export const fetchChats = (accessToken: string) => async (dispatch: AppDispatch) => {
+export const fetchChats = (accessToken: string, setIsLoading?: (val: boolean) => void) => async (dispatch: AppDispatch) => {
     try {
+        if (setIsLoading) setIsLoading(true);
         const response = await axios.get(`${url}/chats/user`, {
             headers: {
                 Authorization: `Bearer ${accessToken}`
             },
-            // withCredentials: true
         });
         dispatch(setChats(response.data));
+
+        console.log(response.data);
     } catch (error) {
         console.error('Error fetching chats: ', error);
+    }
+    finally {
+        if (setIsLoading) setIsLoading(false);
     }
 }
 

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, {useEffect, useState} from "react";
 import {
     Box,
     Button,
@@ -9,6 +9,7 @@ import {
     Slider,
     Grid
 } from "@mui/material";
+import CircularProgress from '@mui/material/CircularProgress';
 import MiniChat from "./MiniChat";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store";
@@ -34,14 +35,31 @@ const ChatPage: React.FC<ChatPageProps> = () => {
   const accessToken = useSelector((state: RootState) => state.authentication.access_token);
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-      dispatch(fetchBots(accessToken))
-    dispatch(fetchChats(accessToken));
-  }, [dispatch, accessToken]);
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        await dispatch(fetchBots(accessToken));
+        await dispatch(fetchChats(accessToken, setIsLoading));
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <>
+        {isLoading ? <>
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+          <CircularProgress />
+        </Box>
+      </> : <>
       <CssBaseline />
       <AppBar position="static">
         <Toolbar>
@@ -89,7 +107,7 @@ const ChatPage: React.FC<ChatPageProps> = () => {
               backgroundColor: '#555'
             }}}>
           <Box>
-            {chats.map((chat: Chat) => (
+            {chats.length > 0 &&  chats.map((chat: Chat) => (
                 //
               <MiniChat key={chat.chat_id} chat_id={chat.chat_id} bot_name={chat.bot_name}
                 bot_avatar={chat.bot_avatar} name={chat.chat_name} created_at={chat.created_at} />
@@ -205,6 +223,8 @@ const ChatPage: React.FC<ChatPageProps> = () => {
         </Box>
         <AddChat />
       </Box>
+        </>}
+
     </>
   );
 };
