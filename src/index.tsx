@@ -10,6 +10,7 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import {BrowserRouter as Router} from "react-router-dom";
 import store, { persistor } from "./store";
+import AppQueryClientProvider from "./QueryClientProvider";
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -19,12 +20,14 @@ root.render(
   <React.StrictMode>
     <Router>
         <ThemeProvider theme={theme}>
-       <PersistGate persistor={persistor}>
-           <Provider store={store}>
-           <CssBaseline />
-           <App />
-       </Provider>
-       </PersistGate>
+       <AppQueryClientProvider>
+           <PersistGate persistor={persistor}>
+               <Provider store={store}>
+                   <CssBaseline />
+                   <App />
+               </Provider>
+           </PersistGate>
+       </AppQueryClientProvider>
     </ThemeProvider>
     </Router>
   </React.StrictMode>

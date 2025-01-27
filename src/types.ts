@@ -19,13 +19,16 @@ export interface Message {
     text: string,
     created_at: string
 }
-
+export interface MiniChip {
+    url: string,
+    label: string
+}
 export interface MiniChatProps {
     chat_id: string,
     bot_name: string,
     bot_avatar: string,
     name: string,
-    created_at: string
+    created_at: string,
 }
 
 export interface pageProps {}
@@ -127,4 +130,14 @@ export type TextTypingEffectProps = {
 export interface SwitchInterface {
     checked: boolean,
     setChecked: (checked: boolean) => void;
+}
+
+export type HoverState = {
+    [key: string]: boolean;
+}
+
+export interface CardProps {
+    text: string;
+    title: string;
+    index: boolean;
 }

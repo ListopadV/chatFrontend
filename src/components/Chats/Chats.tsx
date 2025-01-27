@@ -16,7 +16,7 @@ import { AppDispatch, RootState } from "../../store";
 import {clearChats, fetchChats, setOpening} from '../../redux/chatSlice'
 import AddChat from "./AddChat";
 import { fetchBots } from "../../redux/botsSlice";
-import { ChatPageProps, Chat } from "../../types";
+import {ChatPageProps, Chat, Bot} from "../../types";
 import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
 import 'react-circular-progressbar/dist/styles.css';
 import { setTemperature, setTokens, setTopP } from "../../redux/paramSlice";
@@ -52,6 +52,7 @@ const ChatPage: React.FC<ChatPageProps> = () => {
 
     fetchData();
   }, []);
+
 
   return (
     <>
@@ -110,7 +111,7 @@ const ChatPage: React.FC<ChatPageProps> = () => {
             {chats.length > 0 &&  chats.map((chat: Chat) => (
                 //
               <MiniChat key={chat.chat_id} chat_id={chat.chat_id} bot_name={chat.bot_name}
-                bot_avatar={chat.bot_avatar} name={chat.chat_name} created_at={chat.created_at} />
+                bot_avatar={chat.bot_avatar} name={chat.chat_name} created_at={chat.created_at}  />
             ))}
           </Box>
           <Box
@@ -219,12 +220,10 @@ const ChatPage: React.FC<ChatPageProps> = () => {
               />
             </Grid>
           </Grid>
-
         </Box>
         <AddChat />
       </Box>
         </>}
-
     </>
   );
 };

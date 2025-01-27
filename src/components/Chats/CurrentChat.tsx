@@ -9,10 +9,11 @@ import Switcher from "../CustomComponents/Switch";
 import Message from './Message';
 import { useDebouncedCallback } from 'use-debounce';
 import { AppDispatch, RootState } from "../../store";
-import { askBot } from "../../redux/chatSlice";
+import {askBot, deleteChat} from "../../redux/chatSlice";
 import { fetchMessages, clearMessages } from "../../redux/messagesSlice";
 import { Snack } from "../../types";
 import ErrorSnackbar from "../CustomComponents/ErrorSnackbar";
+import {useQuery, useMutation} from "react-query";
 
 export const CurrentChat: FC = () => {
 
@@ -41,19 +42,10 @@ export const CurrentChat: FC = () => {
     }
   };
 
-  useEffect(() => {
-    try {
-        setLoading(true);
-      if (current_chat.chat_id && current_chat.bot_id) {
-        dispatch(fetchMessages(accessToken, current_chat.chat_id, current_chat.bot_id));
-      }
-    }catch (e){
-        console.error("Error: ", e);
-    }
-    finally {
-        setLoading(false);
-    }
-  }, [dispatch, accessToken, current_chat.chat_id, current_chat.bot_id]);
+  const { data: messagesData, status: messagesStatus, refetch } = useQuery(
+      "messages",
+      () => dispatch(fetchMessages(accessToken, current_chat.chat_id, current_chat.bot_id))
+  )
 
   useEffect(() => {
     if (messages.length > 0) {
@@ -61,10 +53,8 @@ export const CurrentChat: FC = () => {
     }
   }, [messages]);
 
-  const handleSend = (message: string) => {
-    setLoading(true);
-    setFade(false);
-    dispatch(
+  const mutation = useMutation((message: string) =>
+      dispatch(
       askBot(
         accessToken,
         message,
@@ -77,14 +67,19 @@ export const CurrentChat: FC = () => {
         messageOrder + 1,
         current_chat.chat_id,
         current_chat.bot_id,
-        setLoading,
         setSnack
       )
-    ).then(() => {
-      dispatch(fetchMessages(accessToken, current_chat.chat_id, current_chat.bot_id));
-    });
-    setInputValue('');
-  };
+    )
+  , {
+      onSuccess: () => {
+          refetch();
+          setInputValue('');
+      }
+  });
+
+  const handleSend = (message: string) => {
+      mutation.mutate(message);
+  }
 
   useEffect(() => {
     if (loading) {
@@ -203,7 +198,7 @@ export const CurrentChat: FC = () => {
           </Box>
         </Box>
       </Box>
-      {loading && <LinearProgress sx={{ position: 'absolute', top: 0, left: 0, right: 0 }} />}
+      {messagesStatus === 'loading' && <LinearProgress sx={{ position: 'absolute', top: 0, left: 0, right: 0 }} />}
         <ErrorSnackbar snack={snack} setSnack={setSnack} />
     </Box>
   );

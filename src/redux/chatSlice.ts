@@ -50,7 +50,6 @@ export const currentChat = (accessToken: string, chat_id: string) => async (disp
             headers: {
                 Authorization: `Bearer ${accessToken}`,
             },
-            // withCredentials: true
         });
         dispatch(setCurrentChat(response.data));
     } catch (error) {
@@ -67,8 +66,8 @@ export const fetchChats = (accessToken: string, setIsLoading?: (val: boolean) =>
             },
         });
         dispatch(setChats(response.data));
-
         console.log(response.data);
+        return response;
     } catch (error) {
         console.error('Error fetching chats: ', error);
     }
@@ -86,7 +85,6 @@ export const createChat = (accessToken: string, name: string, bot_id: string) =>
             headers: {
                 Authorization: `Bearer ${accessToken}`,
             },
-            // withCredentials: true
         });
         dispatch(setCurrentChat({
             chat_id: response.data.chat_id,
@@ -105,14 +103,14 @@ export const createChat = (accessToken: string, name: string, bot_id: string) =>
 export const deleteChat = (accessToken: string, chat_id: string) => async (dispatch: AppDispatch) => {
     try {
 
-        await axios.delete(`${url}/chats/${chat_id}/delete`, {
+       await axios.delete(`${url}/chats/${chat_id}/delete`, {
             headers: {
                 Authorization: `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
             },
-            // withCredentials: true
-        }).then(() => {
+        }).then((response) => {
             dispatch(fetchChats(accessToken));
+            console.log(response.data);
         })
     } catch (e) {
         console.error("Error deleting chat: ", e);
@@ -127,11 +125,9 @@ export const askBot = (
     message_order: number,
     chat_id: string,
     bot_id: string,
-    setLoading: loadingFunction,
     errorHandler: errorHandler,
 ) => async (dispatch: AppDispatch) => {
     try {
-        setLoading(true);
         const response = await axios.post(`${url}/chats/ask`, {
             text: text,
             message_order: message_order,
@@ -143,12 +139,12 @@ export const askBot = (
                 'X-bot-id': bot_id,
                 Authorization: `Bearer ${accessToken}`
             },
-            // withCredentials: true
         });
         const bot_message = response.data.bot_message;
         const user_message = response.data.user_message;
         dispatch(addMessage(user_message));
         dispatch(addMessage(bot_message));
+        return response;
     } catch (error) {
         if (isAxiosError(error) && error.response){
             errorHandler({
@@ -156,11 +152,8 @@ export const askBot = (
                 open: true
             });
         }
-    } finally {
-        setLoading(false);
     }
 }
-
 
 export const { setChats, setOpening, setCurrentChat, clearChats } = chatsSlice.actions;
 export default chatsSlice.reducer;

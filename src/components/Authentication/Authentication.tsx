@@ -57,6 +57,9 @@ const Authentication: FC<AuthenticationProps> = ({ isLogin, isRegistration }) =>
     const dispatch = useDispatch<AppDispatch>();
 
     const handleSubmit = async (values: FormValues, { resetForm }: { resetForm: () => void }) => {
+        if (!values.email || !values.password){
+
+        } else
     try {
         let response;
         if (isLogin) {
@@ -65,20 +68,19 @@ const Authentication: FC<AuthenticationProps> = ({ isLogin, isRegistration }) =>
                         "email": values.email,
                         "password": values.password
                     }, {
-                        // withCredentials: true,
                         headers: {
                             'Content-Type': 'application/json'
                         }
                     }).then(response => {
                         dispatch(setAccessToken(response.data.access_token));
+                        navigate('/chats');
                     })
-                navigate('/chats');
            } catch (e){
                console.error('Error logging user: ', e);
            }
         }
         if (isRegistration) {
-            try {
+            console.log(values)
                 await axios.post(`${url}/users/registration`, values, {
                         headers: {
                             'Content-Type': 'application/json'
@@ -86,11 +88,8 @@ const Authentication: FC<AuthenticationProps> = ({ isLogin, isRegistration }) =>
                     })
                 .then(response => {
                     dispatch(setAccessToken(response.data.access_token));
+                    navigate('/chats');
                 })
-            navigate('/chats');
-            } catch (e){
-                console.error("Error registering user");
-            }
         }
         resetForm();
     } catch (error) {

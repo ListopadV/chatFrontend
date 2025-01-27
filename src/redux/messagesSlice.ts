@@ -36,20 +36,19 @@ const messagesSlice = createSlice({
 
 export const fetchMessages = (accessToken: string, chat_id: string, bot_id: string) => async (dispatch: AppDispatch) => {
     try {
-        await axios.get(`${url}/messages/fetch`, {
+        const response = await axios.get(`${url}/messages/fetch`, {
         headers: {
             Authorization: `Bearer ${accessToken}`,
             'X-chat-id': chat_id,
             'X-bot-id': bot_id
         },
-            // withCredentials: true
-    }).then(response => {
+    });
         dispatch(setMessages(response.data.messages));
         if (response.data.messages.length > 0){
         const order = response.data.messages[response.data.messages.length  - 1].message_order;
             dispatch(setMessageOrder(order));
         }
-    });
+        return response;
     } catch (e){
         console.error('Error fetching messages: ', e);
     }

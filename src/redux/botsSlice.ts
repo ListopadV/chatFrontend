@@ -22,15 +22,14 @@ const botsSlice = createSlice({
 
 export const fetchBots = (accessToken: string) => async (dispatch: AppDispatch) => {
    try {
-        await axios.get(`${url}/bots/bots`, {
+        const response = await axios.get(`${url}/bots/bots`, {
         headers: {
             Authorization: `Bearer ${accessToken}`,
         },
             // withCredentials: true
-    }).then(response => {
-        console.log(response.data);
-        dispatch(setBots(response.data.bots));
     })
+        dispatch(setBots(response.data.bots));
+       return response;
    } catch (e){
        console.error("Error fetching bots: ", e);
    }

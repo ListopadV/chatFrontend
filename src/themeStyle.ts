@@ -56,6 +56,25 @@ const theme = createTheme({
         }
       ],
     },
+    MuiTypography: {
+      variants: [
+        {
+          props: { variant: 'h6' },
+          style: ({theme }) => ({
+            color: theme.palette.secondary.main,
+            fontSize: theme.breakpoints.down('xs')
+            ? '12px'
+            : theme.breakpoints.down('sm')
+            ? '14px'
+            : theme.breakpoints.down('md')
+            ? '18px'
+            : theme.breakpoints.down('lg')
+            ? '20px'
+            : '15px',
+          })
+        }
+      ]
+    },
     MuiTextField: {
       variants: [
         {

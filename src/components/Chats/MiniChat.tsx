@@ -39,7 +39,8 @@ const MiniChat: FC<MiniChatProps> = ({ chat_id, bot_name, bot_avatar, name, crea
 
   const handleDeleteClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    dispatch(deleteChat(accessToken, chat_id));
+    dispatch(deleteChat(accessToken, chat_id))
+      console.log(chat_id)
   };
 
   return (
