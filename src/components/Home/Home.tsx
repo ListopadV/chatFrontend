@@ -6,10 +6,10 @@ import { Button, keyframes, Box, Typography, AppBar,
 import {useNavigate} from "react-router-dom";
 import AppleIcon from '@mui/icons-material/Apple';
 import SearchIcon from '@mui/icons-material/Search';
-import Aquarium from "../CustomComponents/Aquarium";
-import Carousel from "../CustomComponents/Carousel";
-import {Bitcoins} from "../CustomComponents/Bitcoins";
-import {WelcomePictures} from "../CustomComponents/WelcomePictures";
+import Aquarium from "../LandingComponents/Aquarium";
+import Carousel from "../LandingComponents/Carousel";
+import {Bitcoins} from "../LandingComponents/Bitcoins";
+import {WelcomePictures} from "../LandingComponents/WelcomePictures";
 
 const welcome = keyframes`
 0% {

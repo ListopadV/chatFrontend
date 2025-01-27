@@ -3,7 +3,6 @@ import './App.css';
 import Tree from "./Tree";
 
 function App() {
-
   return (
     <Tree></Tree>
   );

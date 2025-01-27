@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
 import { Box } from '@mui/material';
-import { Card }  from '../CustomComponents/Card';
+import { Card }  from './Card';
 
 const baseCards = [
         {

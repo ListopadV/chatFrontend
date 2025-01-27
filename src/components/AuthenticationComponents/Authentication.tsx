@@ -60,10 +60,9 @@ const Authentication: FC<AuthenticationProps> = ({ isLogin, isRegistration }) =>
         if (!values.email || !values.password){
 
         } else
-    try {
-        let response;
-        if (isLogin) {
-           try {
+            try {
+                if (isLogin) {
+                try {
                     await axios.post(`${url}/users/login`, {
                         "email": values.email,
                         "password": values.password

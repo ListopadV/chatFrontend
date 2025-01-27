@@ -2,10 +2,10 @@ import {useEffect, useState, FC, } from 'react';
 import { Box, Typography, IconButton } from '@mui/material';
 import InsightsIcon from '@mui/icons-material/Insights';
 import PaymentIcon from '@mui/icons-material/Payment';
-import {Python} from "../../SVG/Python";
-import {Brain} from "../../SVG/Brain";
-import { React} from "../../SVG/React";
-import {Skull} from "../../SVG/Skull";
+import {Python} from "../../extra/SVG/Python";
+import {Brain} from "../../extra/SVG/Brain";
+import { React} from "../../extra/SVG/React";
+import {Skull} from "../../extra/SVG/Skull";
 import { keyframes } from "@mui/system";
 import {HoverState} from "../../types";
 

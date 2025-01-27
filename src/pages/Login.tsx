@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import Authentication from "../components/Authentication/Authentication";
+import Authentication from "../components/AuthenticationComponents/Authentication";
 import { LoginProps } from '../types';
 
 export const Login : FC<LoginProps> = () => {

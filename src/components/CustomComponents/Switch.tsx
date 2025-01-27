@@ -3,7 +3,7 @@ import Switch from '@mui/material/Switch';
 import { Box, IconButton } from '@mui/material';
 import KeyboardIcon from '@mui/icons-material/Keyboard';
 import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
-import { useState, FC } from 'react';
+import { FC } from 'react';
 import {SwitchInterface} from "../../types";
 
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({

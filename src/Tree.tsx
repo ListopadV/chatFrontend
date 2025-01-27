@@ -3,8 +3,8 @@ import { Route, Routes } from 'react-router-dom';
 import {Login} from "./pages/Login";
 import {Registration} from "./pages/Registration";
 import Chat from "./pages/Chats";
-import GitHubCallback from "./components/Authentication/GitHubCallback";
-import { CurrentChat } from './components/Chats/CurrentChat';
+import GitHubCallback from "./components/AuthenticationComponents/GitHubCallback";
+import { CurrentChat } from './components/ChatComponents/CurrentChat';
 import Home from './components/Home/Home';
 
 const Tree: FC = () => {

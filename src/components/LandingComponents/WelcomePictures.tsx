@@ -1,6 +1,6 @@
 import {Box, Typography, keyframes} from "@mui/material";
-import {MiniChip} from "./MiniChip";
 import { FC } from 'react';
+import { MiniChip } from "./MiniChip";
 
 const right = keyframes`
 0% {
@@ -38,8 +38,6 @@ export const WelcomePictures: FC = () => {
                     animation: `${left} 2s forwards`,
                     padding: '20px 40px',
                     textAlign: 'center',
-                // border: '1px solid transparent',
-                  // borderImage: 'linear-gradient(90deg, rgba(36,26,209,1) 3%, rgba(96,10,145,1) 16%, rgba(144,21,163,1) 42%, rgba(11,52,129,1) 53%, rgba(10,134,72,1) 69%, rgba(12,108,89,1) 77%, rgba(17,33,138,1) 100%) 1',
                 }}>
                     <Typography sx={{
                         mb: '10px'
@@ -55,8 +53,6 @@ export const WelcomePictures: FC = () => {
                 </Box>
 
                 <Box sx={{
-                    // border: '1px solid transparent',
-                  // borderImage: 'linear-gradient(90deg, rgba(36,26,209,1) 3%, rgba(96,10,145,1) 16%, rgba(144,21,163,1) 42%, rgba(11,52,129,1) 53%, rgba(10,134,72,1) 69%, rgba(12,108,89,1) 77%, rgba(17,33,138,1) 100%) 1',
                     animation: `${right} 3s forwards`,
                     padding: '10px',
                     textAlign: 'center',
