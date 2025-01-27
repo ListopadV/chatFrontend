@@ -10,7 +10,6 @@ import Aquarium from "../CustomComponents/Aquarium";
 import Carousel from "../CustomComponents/Carousel";
 import {Bitcoins} from "../CustomComponents/Bitcoins";
 import {WelcomePictures} from "../CustomComponents/WelcomePictures";
-import { Cards } from '../CustomComponents/Cards';
 
 const welcome = keyframes`
 0% {
