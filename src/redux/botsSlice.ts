@@ -26,7 +26,7 @@ export const fetchBots = (accessToken: string) => async (dispatch: AppDispatch) 
         headers: {
             Authorization: `Bearer ${accessToken}`,
         },
-            // withCredentials: true
+            withCredentials: true
     })
         dispatch(setBots(response.data.bots));
        return response;
