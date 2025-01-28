@@ -15,10 +15,10 @@ const theme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: '#3ac5c3',
+      main: '#4a0c72',
     },
     secondary: {
-      main: '#616161',
+      main: '#ffffff',
     },
     background: {
       default: '#121212',
@@ -53,6 +53,21 @@ const theme = createTheme({
               backgroundColor: 'gray',
             },
           }
+        },
+        {
+          props: { variant: 'text'},
+          style: ({theme}) => ({
+               color: theme.palette.text.primary,
+              fontSize: theme.breakpoints.down('xs')
+              ? '15px'
+              : theme.breakpoints.down('sm')
+              ? '15px'
+              : theme.breakpoints.down('md')
+              ? '12px'
+              : theme.breakpoints.down('lg')
+              ? '12px'
+              : '10px',
+          })
         }
       ],
     },
@@ -72,7 +87,23 @@ const theme = createTheme({
             ? '20px'
             : '15px',
           })
-        }
+        },
+        {
+          props: { variant: 'caption' },
+          style: ({theme}) => ({
+            color: theme.palette.text.primary,
+            fontSize: theme.breakpoints.down('xs')
+            ? '30px'
+            : theme.breakpoints.down('sm')
+            ? '35px'
+            : theme.breakpoints.down('md')
+            ? '40px'
+            : theme.breakpoints.down('lg')
+            ? '45px'
+            : '40px',
+          })
+        },
+
       ]
     },
     MuiTextField: {

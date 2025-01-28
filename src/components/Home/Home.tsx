@@ -4,12 +4,12 @@ import { Button, keyframes, Box, Typography, AppBar,
     InputBase
 } from '@mui/material';
 import {useNavigate} from "react-router-dom";
-import AppleIcon from '@mui/icons-material/Apple';
 import SearchIcon from '@mui/icons-material/Search';
 import Aquarium from "../LandingComponents/Aquarium";
 import Carousel from "../LandingComponents/Carousel";
 import {Bitcoins} from "../LandingComponents/Bitcoins";
 import {WelcomePictures} from "../LandingComponents/WelcomePictures";
+import CoffeeIcon from '@mui/icons-material/Coffee';
 
 const welcome = keyframes`
 0% {
@@ -75,7 +75,7 @@ const Home: FC = () => {
             <Toolbar sx={{ justifyContent: 'space-between' }}>
               <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1, maxWidth: '25vw' }}>
                 <IconButton size="large" edge="start" sx={{ mr: 2 }}>
-                  <AppleIcon />
+                    <CoffeeIcon />
                 </IconButton>
                 <Search sx={{ flexGrow: 1 }}>
                   <SearchIconWrapper>
@@ -108,20 +108,19 @@ const Home: FC = () => {
                     nav('/registration');
                   }}
                 >
-                  Sign In
+                  Sign Up
                 </Button>
               </Box>
             </Toolbar>
           </AppBar>
-
-
             <Box sx={{
                 animation: `${welcome} 1.8s ease-out`,
                 margin: '50px auto',
                 padding: 0,
+                textAlign: 'center'
             }}>
-                    <Typography variant={"h3"} sx={{ margin: 'auto', textAlign: 'center'}}>
-                        Choose. Chat. Create
+                    <Typography variant={"caption"}>
+                        Welcome 😊
                     </Typography>
 
                     <Typography variant={"h5"} sx={{ maxWidth: '50vw', textAlign: 'center', padding: '25px 0'}}>
@@ -132,7 +131,6 @@ const Home: FC = () => {
             <Aquarium />
             <Bitcoins />
             <Carousel />
-            {/*<Cards />*/}
             </Box>
     )
 }

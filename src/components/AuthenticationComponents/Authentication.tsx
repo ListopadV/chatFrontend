@@ -225,7 +225,7 @@ const Authentication: FC<AuthenticationProps> = ({ isLogin, isRegistration }) =>
                                 <Button
                                     type="submit"
                                     variant="authentication"
-                                    sx={{mt: 2, width: '30%',   '&:hover': {
+                                    sx={{mt: 2, width: '30%', '&:hover': {
                                               animation: `${movingButton} 1s ease-in-out forward`,
                                               backgroundSize: '200% 100%',
                                               backgroundPosition: 'left',

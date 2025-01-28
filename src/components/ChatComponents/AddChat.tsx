@@ -100,7 +100,6 @@ const AddChat: FC = () => {
                             { bots && bots.map((item, index) => (
                                 <Tooltip key={index} title={"Chosen model will have moving avatar with border"} placement="top">
                                     <Box
-
                                     sx={{
                                         display: 'flex',
                                         flexDirection: 'column',
@@ -173,8 +172,8 @@ const AddChat: FC = () => {
                         <Box sx={{
                             display: 'flex', flexDirection: 'row', justifyContent: 'space-between'
                         }}>
-                            <Button type="submit">Confirm</Button>
-                            <Button onClick={closeChat}>Cancel</Button>
+                            <Button type="submit" variant={"text"}>Confirm</Button>
+                            <Button onClick={closeChat} variant={"text"}>Cancel</Button>
                         </Box>
                     </Form>
                 </Formik>
