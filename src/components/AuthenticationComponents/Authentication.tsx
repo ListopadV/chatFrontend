@@ -68,8 +68,9 @@ const Authentication: FC<AuthenticationProps> = ({ isLogin, isRegistration }) =>
                         "password": values.password
                     }, {
                         headers: {
-                            'Content-Type': 'application/json'
-                        }
+                            'Content-Type': 'application/json',
+                        },
+                        withCredentials: true
                     }).then(response => {
                         dispatch(setAccessToken(response.data.access_token));
                         navigate('/chats');
@@ -83,7 +84,9 @@ const Authentication: FC<AuthenticationProps> = ({ isLogin, isRegistration }) =>
                 await axios.post(`${url}/users/registration`, values, {
                         headers: {
                             'Content-Type': 'application/json'
-                        }
+                        },
+                        withCredentials: true
+
                     })
                 .then(response => {
                     dispatch(setAccessToken(response.data.access_token));
