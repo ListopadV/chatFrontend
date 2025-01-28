@@ -1,4 +1,4 @@
-export const url = 'https://chatbackend-5.onrender.com';
+export const url = 'https://chatbackend-2-a0ju.onrender.com';
 // export const url = 'http://localhost:5000'
 const github_client_id = process.env.REACT_APP_github_client_id;
 const redirectUri = process.env.REACT_APP_redirectUri
