@@ -70,7 +70,6 @@ const Authentication: FC<AuthenticationProps> = ({ isLogin, isRegistration }) =>
                         headers: {
                             'Content-Type': 'application/json',
                         },
-                        withCredentials: true
                     }).then(response => {
                         dispatch(setAccessToken(response.data.access_token));
                         navigate('/chats');
@@ -85,7 +84,6 @@ const Authentication: FC<AuthenticationProps> = ({ isLogin, isRegistration }) =>
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        withCredentials: true
 
                     })
                 .then(response => {
