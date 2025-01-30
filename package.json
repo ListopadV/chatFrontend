@@ -2,7 +2,7 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:8000",
+  "proxy": "http://localhost:3000",
   "dependencies": {
     "@autosys/react-mui-keyboard": "^1.3.1",
     "@emotion/react": "^11.13.3",
