@@ -45,8 +45,8 @@ const registrationInitialValues: RegistrationDto = {
 
 const registrationValidationSchema =
   Yup.object({
-    first_name: Yup.string().min(3).required("Name required"),
-    last_name: Yup.string().min(3).required("Surname required"),
+    first_name: Yup.string().min(3, "Minimum 3 symbols are required").required("Name required"),
+    last_name: Yup.string().min(3, "Minimum 3 symbols are required").required("Surname required"),
     email: Yup.string().email().required('Email required'),
     password: Yup.string().min(6).required('Password required'),
   })
