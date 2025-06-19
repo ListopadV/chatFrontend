@@ -37,7 +37,7 @@ export interface MiniChatProps {
 
 const MiniChat: FC<MiniChatProps> = ({ chat_id, bot_id, bot_name, bot_avatar, name, created_at }) => {
 
-  const { data: currentChat, isLoading } = useCurrentChat();
+  const { data: currentChat, isLoading } = useCurrentChat(chat_id);
   const { deleteChat, isDeleting } = useDeleteChat(chat_id);
 
   const navigate = useNavigate();
@@ -45,11 +45,12 @@ const MiniChat: FC<MiniChatProps> = ({ chat_id, bot_id, bot_name, bot_avatar, na
 
  const handleChatClick = () => {
     if (isLoading) return;
-    if (!currentChat) return;
     idManager.setChatId(chat_id);
     idManager.setBotId(bot_id);
-    dispatch(setCurrentChat(currentChat));
-    navigate('/chat');
+    if (currentChat){
+         dispatch(setCurrentChat(currentChat));
+        navigate('/chat');
+    }
   };
     const handleDeleteClick = async (e: React.MouseEvent) => {
       e.stopPropagation();

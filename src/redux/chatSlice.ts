@@ -21,11 +21,14 @@ const chatsSlice = createSlice({
         setCurrentChat: (state, action: PayloadAction<ChatEntity>) => {
             state.currentChat = action.payload;
         },
+        clearCurrentChat: (state) => {
+          state.currentChat = null;
+        },
         clearChats: (state) => {
             state.chats = [];
         }
     }
 });
 
-export const { setChats, setOpening, setCurrentChat, clearChats } = chatsSlice.actions;
+export const { setChats, setOpening, clearCurrentChat, setCurrentChat, clearChats } = chatsSlice.actions;
 export default chatsSlice.reducer;

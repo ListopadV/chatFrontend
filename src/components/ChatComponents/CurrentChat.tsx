@@ -14,6 +14,8 @@ import { useFetchMessages } from "../../Hooks/api/useFetchMessages";
 import { useAskBot } from "../../Hooks/api/useAskBot";
 import { MessageDto } from "../../DTO's/requests/askBot";
 import { clearMessages } from "../../redux/messagesSlice";
+import {clearCurrentChat} from "../../redux/chatSlice";
+import {idManager} from "../../services/auth/idManager";
 
 const BG = "#181825";
 const ACCENT = "#8e5cf7";
@@ -140,8 +142,10 @@ export const CurrentChat: FC = () => {
         }}>
           <ChevronLeftIcon
             onClick={() => {
-              dispatch(clearMessages());
-              navigate('/chats');
+               dispatch(clearMessages());
+                dispatch(clearCurrentChat());
+                idManager.clear();
+                navigate('/chats');
             }}
             sx={{ cursor: 'pointer', color: '#fff', fontSize: 32 }}
           />

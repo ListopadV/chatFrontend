@@ -72,9 +72,7 @@ export const deleteChat = async (): Promise<void | undefined> => {
     }
 }
 
-export const currentChat = async (): Promise<ChatEntity | undefined> => {
-    const chatId = idManager.getChatId();
-    if (!chatId) return undefined;
-    const { data } = await apiClient.get<ResponseFetchChatsDto>(`/chats/${chatId}`);
+export const currentChat = async (chat_id: string): Promise<ChatEntity | undefined> => {
+    const { data } = await apiClient.get<ResponseFetchChatsDto>(`/chats/${chat_id}`);
     return mapChatDto(data);
 }
