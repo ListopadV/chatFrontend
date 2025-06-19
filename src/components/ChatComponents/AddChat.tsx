@@ -199,6 +199,8 @@ const AddChat: FC = () => {
                                 if (res?.id) {
                                     idManager.setBotId(chosenBot);
                                     idManager.setChatId(res.id);
+                                    console.log(chosenBot);
+                                    console.log(res)
                                     dispatch(setCurrentChat({
                                         id: res.id,
                                         botId: chosenBot,
