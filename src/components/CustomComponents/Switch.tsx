@@ -4,7 +4,12 @@ import { Box, IconButton } from '@mui/material';
 import KeyboardIcon from '@mui/icons-material/Keyboard';
 import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import { FC } from 'react';
-import {SwitchInterface} from "../../types";
+// import {SwitchInterface} from "../../types";
+
+interface SwitchInterface {
+  checked: boolean,
+  setChecked: (arg: boolean) => void
+}
 
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   width: 62,

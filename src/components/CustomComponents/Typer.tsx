@@ -1,7 +1,14 @@
 import React, { FC } from 'react';
 import { Box, Typography } from '@mui/material';
-import {TextTypingEffectProps} from "../../types";
-import useTyper from "../Hooks/useTyper";
+// import {TextTypingEffectProps} from "../../types";
+import useTyper from "../../Hooks/custom/useTyper";
+
+interface TextTypingEffectProps {
+    isTypeByLetter: boolean,
+    duration: number,
+    text: string,
+    component: React.ReactNode
+}
 
 const Typer: FC<TextTypingEffectProps> = ({ isTypeByLetter, duration, text, component}) => {
   const textToShow = useTyper(text, duration, isTypeByLetter);

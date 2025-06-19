@@ -1,10 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { ParamsState } from '../types';
+
+interface ParamsState {
+    temperature: number,
+    max_tokens: number,
+    top_p: number
+}
 
 const initialState: ParamsState = {
-    temperature: 70,
+    temperature: 0.7,
     max_tokens: 800,
-    top_p: 95
+    top_p: 0.95
 }
 
 const paramSlice = createSlice({

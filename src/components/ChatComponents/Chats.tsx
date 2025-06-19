@@ -1,211 +1,273 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import {
-    Box,
-    Button,
-    Typography,
-    AppBar,
-    Toolbar,
-    CssBaseline,
-    Slider,
-    Grid
+  Box,
+  Button,
+  Typography,
+  AppBar,
+  Toolbar,
+  CssBaseline,
+  Slider,
+  Grid,
 } from "@mui/material";
-import CircularProgress from '@mui/material/CircularProgress';
 import MiniChat from "./MiniChat";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store";
-import {clearChats, fetchChats, setOpening} from '../../redux/chatSlice'
+import { clearChats, setOpening } from "../../redux/chatSlice";
 import AddChat from "./AddChat";
-import { fetchBots } from "../../redux/botsSlice";
-import {ChatPageProps, Chat, Bot} from "../../types";
+import { ChatEntity } from "../../Entities/ChatEntities";
 import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
-import 'react-circular-progressbar/dist/styles.css';
+import "react-circular-progressbar/dist/styles.css";
 import { setTemperature, setTokens, setTopP } from "../../redux/paramSlice";
-import {clearMessages} from "../../redux/messagesSlice";
-import {clearUser} from "../../redux/loginSlice";
-import HomeIcon from '@mui/icons-material/Home';
-import {useNavigate} from "react-router-dom";
-import Typer from '../CustomComponents/Typer';
+import { clearMessages } from "../../redux/messagesSlice";
+import { clearUser } from "../../redux/loginSlice";
+import HomeIcon from "@mui/icons-material/Home";
+import { useNavigate } from "react-router-dom";
+import Typer from "../CustomComponents/Typer";
+import { useFetchChats } from "../../Hooks/api/useFetchChats";
+import {idManager} from "../../services/auth/idManager";
+import {tokenManager} from "../../services/auth/tokenManager";
+import {mutate} from "swr";
 
-const ChatPage: React.FC<ChatPageProps> = () => {
-
-  const chats = useSelector((state: RootState) => state.chats.chats);
+const ChatPage: React.FC = () => {
   const tokens = useSelector((state: RootState) => state.params.max_tokens);
   const top_p = useSelector((state: RootState) => state.params.top_p);
   const temperature = useSelector((state: RootState) => state.params.temperature);
-  const accessToken = useSelector((state: RootState) => state.authentication.access_token);
+  const chats = useSelector((state: RootState) => state.chats.chats);
+
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        await dispatch(fetchBots(accessToken));
-        await dispatch(fetchChats(accessToken, setIsLoading));
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
+  const { isLoading } = useFetchChats();
 
   return (
     <>
-        {isLoading ? <>
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-          <CircularProgress />
-        </Box>
-      </> : <>
       <CssBaseline />
       <AppBar position="static">
         <Toolbar>
-          <Box sx={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              width: '100%'
-          }}>
-              <Typography variant="h6">Chat Application</Typography>
-            <HomeIcon onClick={() => {
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              width: "100%",
+            }}
+          >
+            <Typography variant="h6">Chat Application</Typography>
+            <HomeIcon
+              onClick={() => {
                 dispatch(clearMessages());
                 dispatch(clearChats());
                 dispatch(clearUser());
-                navigate('/login')
-            }} />
+                idManager.clear?.();
+                tokenManager.clear();
+                localStorage.clear();
+                sessionStorage.clear();
+                mutate(() => true, undefined, { revalidate: false });
+                navigate("/login");
+              }}
+              sx={{ cursor: "pointer" }}
+            />
           </Box>
         </Toolbar>
       </AppBar>
-      <Box sx={{ display: "flex", height: "100vh" }}>
+      <Box
+        sx={{
+          display: "flex",
+          height: "calc(100vh - 64px)",
+          background: "#111",
+        }}
+      >
+        {/* Левая колонка */}
         <Box
           sx={{
-            width: {
-              xs: '100%',
-              sm: '25%',
-            },
-            borderRight: "1px solid #ccc",
-            overflowY: chats.length > 0 ? "auto" : "hidden",
-            direction: 'rtl',
+            width: { xs: "100%", sm: "25%", md: "22%", lg: "18%" },
+            minWidth: "210px",
+            maxWidth: "350px",
+            borderRight: "1px solid #222",
             display: "flex",
             flexDirection: "column",
-               '&::-webkit-scrollbar': {
-              width: '12px',
-            },
-            '&::-webkit-scrollbar-track': {
-              backgroundColor: '#000'
-            },
-            '&::-webkit-scrollbar-thumb': {
-              backgroundColor: '#888',
-              borderRadius: '10px',
-              border: '3px solid black'
-            },
-            '&::-webkit-scrollbar-thumb:hover': {
-              backgroundColor: '#555'
-            }}}>
-          <Box>
-            {chats.length > 0 &&  chats.map((chat: Chat) => (
-                //
-              <MiniChat key={chat.chat_id} chat_id={chat.chat_id} bot_name={chat.bot_name}
-                bot_avatar={chat.bot_avatar} name={chat.chat_name} created_at={chat.created_at}  />
-            ))}
-          </Box>
+            height: "100%",
+            background: "#181828",
+            boxSizing: "border-box",
+          }}
+        >
+          {/* Кнопка добавления */}
           <Box
             sx={{
               display: "flex",
               justifyContent: "center",
               alignItems: "flex-start",
-              height: "100%",
+              flexShrink: 0,
+              padding: 2,
+              borderBottom: "1px solid #222",
             }}
           >
-                <Button variant="authentication" sx={{ width: '70%', mt: 6 }} onClick={() => {
-              dispatch(setOpening(true));
-            }}>
+            <Button
+              variant="authentication"
+              sx={{ width: "80%", mt: 1, mb: 1 }}
+              onClick={() => {
+                dispatch(setOpening(true));
+              }}
+            >
               Add
             </Button>
+          </Box>
 
+          {/* Список чатов */}
+          <Box
+            sx={{
+              flexGrow: 1,
+              overflowY: "auto",
+              pb: 2,
+              "&::-webkit-scrollbar": { width: "8px" },
+              "&::-webkit-scrollbar-thumb": { background: "#333", borderRadius: "8px" },
+              "&::-webkit-scrollbar-track": { background: "transparent" },
+            }}
+          >
+            {isLoading ? (
+              <Typography sx={{ mt: 5, color: "gray", textAlign: "center" }}>
+                Loading chats...
+              </Typography>
+            ) : chats.length === 0 ? (
+              <Typography sx={{ mt: 5, color: "gray", textAlign: "center" }}>
+                No chats yet. Add your first chat!
+              </Typography>
+            ) : (
+              chats.map((chat: ChatEntity) => (
+                <MiniChat
+                  key={chat.id}
+                  bot_avatar={chat.avatar}
+                  bot_name={chat.botName}
+                  chat_id={chat.id}
+                  name={chat.name}
+                  bot_id={chat.botId}
+                  created_at={chat.createdAt}
+                />
+              ))
+            )}
           </Box>
         </Box>
 
-        <Box sx={{ width: '75%', padding: 2, margin: '0 auto' }}>
-            <Box sx={{
-                mb: 4,
-            }}>
-                <Typer text="* Temperature - creativity and randomness of response" duration={30} isTypeByLetter={true} component={"p"} />
-                <Typer text="* TopP - text diversity" duration={30} isTypeByLetter={true} component={"p"} />
-                <Typer text="* Max tokens - unit of text data (more tokens = more precise text)" duration={30} isTypeByLetter={true} component={"p"} />
-            </Box>
+        {/* Правая часть */}
+        <Box
+          sx={{
+            flex: 1,
+            padding: 2,
+            margin: "0 auto",
+            overflowY: "auto",
+            background: "#171726",
+            minHeight: 0,
+          }}
+        >
+          <Box sx={{ mb: 4 }}>
+            <Typer
+              text="* Temperature - creativity and randomness of response"
+              duration={30}
+              isTypeByLetter={true}
+              component={"p"}
+            />
+            <Typer
+              text="* TopP - text diversity"
+              duration={30}
+              isTypeByLetter={true}
+              component={"p"}
+            />
+            <Typer
+              text="* Max tokens - unit of text data (more tokens = more precise text)"
+              duration={30}
+              isTypeByLetter={true}
+              component={"p"}
+            />
+          </Box>
           <Grid container spacing={2} justifyContent="center">
-            <Grid item xs={16} md={4} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <Box sx={{ width: { xs: '60px', md: '120px' }, height: { xs: '60px', md: '120px' } }}>
-                <CircularProgressbar value={temperature} text={`${temperature}°`}
+            <Grid
+              item
+              xs={16}
+              md={4}
+              sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+            >
+              <Box sx={{ width: { xs: "60px", md: "120px" }, height: { xs: "60px", md: "120px" } }}>
+                <CircularProgressbar
+                  value={temperature * 100}
+                  text={`${temperature}°`}
                   minValue={1}
-                  maxValue={100}
+                  maxValue={200}
                   styles={buildStyles({
-                    textSize: '10px',
-                    backgroundColor: 'linear-gradient(110.6deg, rgb(156, 116, 129) -18.3%, rgb(67, 54, 74) 16.4%, rgb(47, 48, 67) 68.2%, rgb(27, 23, 36) 99.1%)',
-                    pathColor: '#c76c0a',
-                    trailColor: '#2c2d45',
-                    textColor: 'white'
-                  })} />
+                    textSize: "10px",
+                    pathColor: "#c76c0a",
+                    trailColor: "#2c2d45",
+                    textColor: "white",
+                  })}
+                />
               </Box>
               <Slider
                 size={"small"}
-                value={temperature}
+                value={temperature * 100}
                 onChange={(e, newValue) => {
-                  dispatch(setTemperature(newValue as number));
+                  dispatch(setTemperature((newValue as number) / 100));
                 }}
                 min={1}
-                max={100}
-                sx={{ maxWidth: { xs: '80px', md: '100px' }, mt: 1}}
-                defaultValue={temperature}
+                max={200}
+                sx={{ maxWidth: { xs: "80px", md: "100px" }, mt: 1 }}
+                defaultValue={temperature * 100}
               />
             </Grid>
 
-            <Grid item xs={12} md={4} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <Box sx={{ width: { xs: '60px', md: '120px' }, height: { xs: '60px', md: '120px' } }}>
-                <CircularProgressbar value={top_p}
+            <Grid
+              item
+              xs={12}
+              md={4}
+              sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+            >
+              <Box sx={{ width: { xs: "60px", md: "120px" }, height: { xs: "60px", md: "120px" } }}>
+                <CircularProgressbar
+                  value={top_p * 100}
                   minValue={1}
                   maxValue={100}
-                  text={`Top P ${top_p}%`} styles={buildStyles({
-                    textSize: '10px',
-                    backgroundColor: 'linear-gradient(110.6deg, rgb(156, 116, 129) -18.3%, rgb(67, 54, 74) 16.4%, rgb(47, 48, 67) 68.2%, rgb(27, 23, 36) 99.1%)',
-                    trailColor: '#2c2d45',
-                    pathColor: '#0ca1a6',
-                    textColor: 'white'
-                  })} />
+                  text={`Top P ${top_p}%`}
+                  styles={buildStyles({
+                    textSize: "10px",
+                    trailColor: "#2c2d45",
+                    pathColor: "#0ca1a6",
+                    textColor: "white",
+                  })}
+                />
               </Box>
               <Slider
                 size={"small"}
-                value={top_p}
-                defaultValue={top_p}
+                value={top_p * 100}
+                defaultValue={top_p * 100}
                 onChange={(e, newValue) => {
-                  dispatch(setTopP(newValue as number));
+                  dispatch(setTopP((newValue as number) / 100));
                 }}
                 min={1}
                 max={100}
-                sx={{ maxWidth: { xs: '80px', md: '100px' }, mt: 1}}
+                sx={{ maxWidth: { xs: "80px", md: "100px" }, mt: 1 }}
               />
             </Grid>
           </Grid>
 
           <Grid container justifyContent="center" sx={{ marginTop: 2 }}>
-            <Grid item xs={12} md={4} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <Box sx={{ width: { xs: '60px', md: '120px' }, height: { xs: '60px', md: '120px' } }}>
-                <CircularProgressbar value={tokens} text={`${tokens} max tokens`}
+            <Grid
+              item
+              xs={12}
+              md={4}
+              sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+            >
+              <Box sx={{ width: { xs: "60px", md: "120px" }, height: { xs: "60px", md: "120px" } }}>
+                <CircularProgressbar
+                  value={tokens}
+                  text={`${tokens} max tokens`}
                   minValue={1}
                   maxValue={4096}
                   styles={buildStyles({
-                    textSize: '10px',
-                    backgroundColor: 'linear-gradient(110.6deg, rgb(156, 116, 129) -18.3%, rgb(67, 54, 74) 16.4%, rgb(47, 48, 67) 68.2%, rgb(27, 23, 36) 99.1%)',
-                    trailColor: '#2c2d45',
-                    pathColor: '#080a4a',
-                    textColor: 'white'
-                  })} />
+                    textSize: "10px",
+                    trailColor: "#2c2d45",
+                    pathColor: "#080a4a",
+                    textColor: "white",
+                  })}
+                />
               </Box>
               <Slider
                 size={"small"}
@@ -216,14 +278,13 @@ const ChatPage: React.FC<ChatPageProps> = () => {
                 }}
                 min={1}
                 max={4096}
-                sx={{ maxWidth: { xs: '80px', md: '100px' }, mt: 1}}
+                sx={{ maxWidth: { xs: "80px", md: "100px" }, mt: 1 }}
               />
             </Grid>
           </Grid>
         </Box>
         <AddChat />
       </Box>
-        </>}
     </>
   );
 };

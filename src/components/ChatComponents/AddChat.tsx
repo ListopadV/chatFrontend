@@ -1,182 +1,299 @@
-import React, {FC, useState} from 'react';
-import {Box, Modal, TextField, Button, Typography, Avatar, Tooltip} from "@mui/material";
-import {Field, Form, Formik} from "formik";
-import {useDispatch, useSelector} from "react-redux";
-import {AppDispatch, RootState} from "../../store";
-import { setOpening } from "../../redux/chatSlice";
+import React, { FC, useState } from 'react';
+import { Box, Modal, TextField, Button, Typography, Avatar, Tooltip } from "@mui/material";
+import { Field, Form, Formik } from "formik";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../store";
+import { setCurrentChat, setOpening } from "../../redux/chatSlice";
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-import {createChat} from "../../redux/chatSlice";
-import {NavigateFunction, useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useFetchBots } from "../../Hooks/api/useFetchBots";
+import { useCreateChat } from "../../Hooks/api/useCreateChat";
+import CircularProgress from "@mui/material/CircularProgress";
+import { idManager } from "../../services/auth/idManager";
+
+const ACCENT = '#8e5cf7';
+const ACCENT_HOVER = '#a48ede';
+const BG = '#181825';
 
 const AddChat: FC = () => {
-
     const open = useSelector((state: RootState) => state.chats.adding);
-    const bots = useSelector((state: RootState) => state.bots.bots);
     const dispatch = useDispatch<AppDispatch>();
-    const [chosenBot, setChosenBot] = useState<string>('d2967dbb-7150-46e5-be2d-1159b45ad71f');
-    const accessToken = useSelector((state: RootState) => state.authentication.access_token);
-    const navigate: NavigateFunction = useNavigate();
+    const [chosenBot, setChosenBot] = useState<string>('');
+    const navigate = useNavigate();
     const [left, setLeft] = useState<number>(0);
-    const [leftArrowDis, setLeftArrowDis] = useState<boolean>(false);
-    const [rightArrowDis, setRightArrowDis] = useState<boolean>(false);
 
-    const closeChat = () => {
-        dispatch(setOpening(false));
-    };
+    const { data: bots, error: botsError, isLoading: botsLoading } = useFetchBots(undefined, open);
+    const { isCreating, createChat } = useCreateChat();
+
+    const closeChat = () => dispatch(setOpening(false));
 
     const handleNext = () => {
+        if (!bots) return;
         const maxLeft = -(bots.length - 1) * 200;
-        if (left > maxLeft) {
-            setLeft(prev => Math.max(prev - 200, maxLeft));
-            setRightArrowDis(false)
-            setLeftArrowDis(false);
-        } else {
-            setRightArrowDis(true);
-        }
+        setLeft((prev) => Math.max(prev - 200, maxLeft));
     };
 
     const handlePrevious = () => {
-        if (left < 0) {
-            setLeft(prev => Math.min(prev + 200, 0));
-            setLeftArrowDis(false)
-            setRightArrowDis(false)
-        } else {
-            setLeftArrowDis(true);
-        }
+        setLeft((prev) => Math.min(prev + 200, 0));
     };
 
     return (
         <Modal open={open} onClose={closeChat} style={{ zIndex: 1300 }}>
-
             <Box sx={{
                 position: 'absolute',
                 top: '50%',
                 left: '50%',
                 transform: 'translate(-50%, -50%)',
-                width: {
-                     xs: '90vw',
-                      sm: '80vw',
-                      md: '70vw',
-                      lg: '50vw',
-                      xl: '50vw',
-                },
-                border: 'none',
-                boxShadow: '0 2px 5px white',
+                width: { xs: '90vw', sm: '70vw', md: '50vw', lg: '40vw', xl: '35vw' },
+                bgcolor: BG,
+                boxShadow: '0 2px 24px 0 rgba(120,100,255,0.18)',
+                borderRadius: '25px',
+                outline: 'none',
                 p: 4,
-                backgroundColor: 'black',
-                borderRadius: '25px'
+                color: '#fff'
             }}>
-
-                <Box sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
+                <Typography variant="h6" sx={{
+                    color: ACCENT,
+                    mb: 3,
+                    textAlign: 'center',
+                    fontWeight: 700,
+                    letterSpacing: 1,
                 }}>
-                    <KeyboardArrowLeftIcon onClick={handlePrevious} sx={{
-                        color: leftArrowDis ? 'gray': 'white'
-                    }} />
+                    Add a New Chat
+                </Typography>
 
-                    <Box sx={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        overflow: 'hidden',
-                        width: '200px',
-                    }}>
+                {botsLoading && (
+                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 200 }}>
+                        <CircularProgress />
+                    </Box>
+                )}
+
+                {botsError && (
+                    <Typography color="error" sx={{ mt: 2, mb: 2, textAlign: 'center' }}>
+                        Ошибка загрузки ботов, попробуйте позже.
+                    </Typography>
+                )}
+
+                {!botsLoading && !botsError && (!bots || bots.length === 0) && (
+                    <Typography sx={{ mt: 3, color: '#aaa', textAlign: 'center' }}>
+                        Нет доступных ботов. Сначала создайте бота.
+                    </Typography>
+                )}
+
+                {!botsLoading && !botsError && bots && bots.length > 0 && (
+                    <>
                         <Box sx={{
                             display: 'flex',
-                            flexDirection: 'row',
-                            width: `${bots && bots.length * 200}px`,
-                            transition: 'margin-left 0.5s ease-out',
-                            marginLeft: {
-                                xs: `${left - 12}px`,
-                                sm: `${left}px`,
-                                md: `${left}px`,
-                                lg: `${left}px`,
-                                xl: `${left}px`
-                            }
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            mb: 3,
+                            gap: 2,
                         }}>
-                            { bots && bots.map((item, index) => (
-                                <Tooltip key={index} title={"Chosen model will have moving avatar with border"} placement="top">
-                                    <Box
-                                    sx={{
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        justifyContent: 'space-around',
-                                        alignItems: 'center',
-                                        textAlign: 'center',
-                                        width: '200px',
-                                        marginLeft: '10px',
-                                        marginRight: '10px'
-                                    }}
-                                >
-                                    <Typography sx={{
-                                        fontSize: {
-                                            xs: '10px',
-                                            sm: '12px',
-                                            md: '14px',
-                                            lg: '15px',
-                                            xl: '16px'
-                                        }
-                                    }}>
-                                        {item.description}
-                                    </Typography>
-                                    <Box
-                                        onClick={() => {
-                                            setChosenBot(item.bot_id);
-                                        }}
-                                    >
-                                        <Avatar src={item.bot_avatar}
-                                                className={chosenBot === item.bot_id ? "bordered" : ""}
+                            <KeyboardArrowLeftIcon
+                                onClick={handlePrevious}
+                                sx={{
+                                    color: left === 0 ? '#444' : ACCENT,
+                                    fontSize: 38,
+                                    cursor: left === 0 ? 'default' : 'pointer',
+                                    transition: 'color 0.2s'
+                                }}
+                            />
+                            <Box sx={{
+                                overflow: 'hidden',
+                                width: '200px',
+                                mx: 1,
+                                background: 'rgba(27,23,36,0.6)',
+                                borderRadius: '18px',
+                                border: `1.5px solid ${ACCENT}`,
+                                boxShadow: '0 0 6px 0 #34206155'
+                            }}>
+                                <Box sx={{
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    width: `${bots.length * 200}px`,
+                                    transition: 'margin-left 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55)',
+                                    marginLeft: `${left}px`
+                                }}>
+                                    {bots.map((item) => (
+                                        <Tooltip key={item.id} title={item.description || "Bot"} placement="top">
+                                            <Box
                                                 sx={{
-                                            width: '50px',
-                                            height: '50px',
-                                                    borderRadius: '50%',
-                                                    mt: '8px'
-                                        }}  />
-                                        <Typography sx={{ width: '50px', fontSize: '10px', pt: '12px' }}>{item.name}</Typography>
-                                        <Typography sx={{ width: '50px', fontSize: '10px', pt: '2px' }}>{item.model}</Typography>
-                                    </Box>
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                    alignItems: 'center',
+                                                    width: '200px',
+                                                    px: 1,
+                                                    cursor: 'pointer',
+                                                    transition: 'box-shadow 0.2s, border 0.2s',
+                                                    border: chosenBot === item.id
+                                                        ? `2px solid ${ACCENT}`
+                                                        : '2px solid transparent',
+                                                    borderRadius: '16px',
+                                                    boxShadow: chosenBot === item.id
+                                                        ? `0 0 16px 0 ${ACCENT}55`
+                                                        : 'none',
+                                                    background: chosenBot === item.id
+                                                        ? 'rgba(142, 92, 247, 0.10)'
+                                                        : 'transparent',
+                                                }}
+                                                onClick={() => setChosenBot(item.id)}
+                                            >
+                                                <Avatar
+                                                    src={item.avatar}
+                                                    sx={{
+                                                        width: 60,
+                                                        height: 60,
+                                                        border: chosenBot === item.id
+                                                            ? `2.5px solid ${ACCENT}`
+                                                            : '2.5px solid #222',
+                                                        boxShadow: chosenBot === item.id
+                                                            ? `0 0 8px ${ACCENT_HOVER}`
+                                                            : 'none',
+                                                        transition: 'all 0.2s'
+                                                    }}
+                                                />
+                                                <Typography sx={{
+                                                    width: '100%',
+                                                    fontSize: '13px',
+                                                    fontWeight: 600,
+                                                    color: '#fff',
+                                                    pt: 2,
+                                                    textAlign: 'center',
+                                                    textShadow: '0 1px 5px #000b'
+                                                }}>
+                                                    {item.name}
+                                                </Typography>
+                                                <Typography sx={{
+                                                    width: '100%',
+                                                    fontSize: '12px',
+                                                    pt: 0.5,
+                                                    color: ACCENT,
+                                                    fontWeight: 500,
+                                                    textAlign: 'center'
+                                                }}>
+                                                    {item.model}
+                                                </Typography>
+                                            </Box>
+                                        </Tooltip>
+                                    ))}
                                 </Box>
-                                </Tooltip>
-                            ))}
+                            </Box>
+                            <KeyboardArrowRightIcon
+                                onClick={handleNext}
+                                sx={{
+                                    color: left === -(bots.length - 1) * 200 ? '#444' : ACCENT,
+                                    fontSize: 38,
+                                    cursor: left === -(bots.length - 1) * 200 ? 'default' : 'pointer',
+                                    transition: 'color 0.2s'
+                                }}
+                            />
                         </Box>
-                    </Box>
 
-                    <KeyboardArrowRightIcon onClick={handleNext} sx={{
-                        color: rightArrowDis ? 'gray' : 'white'
-                    }} />
-                </Box>
-
-                <Formik initialValues={{ name: '' }} onSubmit={(e) => {
-                    dispatch(setOpening(false));
-                    dispatch(createChat(accessToken, e.name, chosenBot)).then(() => {
-                        navigate('/chat');
-                    });
-                }}>
-                    <Form style={{
-                        margin: 'auto',
-                        width: '80%',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'space-around',
-                        height: '80%'
-                    }}>
-                        <Field
-                            as={TextField}
-                            name="name"
-                            placeholder="Anything."
-                            variant="standard"
-                        />
-                        <Box sx={{
-                            display: 'flex', flexDirection: 'row', justifyContent: 'space-between'
-                        }}>
-                            <Button type="submit" variant={"text"}>Confirm</Button>
-                            <Button onClick={closeChat} variant={"text"}>Cancel</Button>
-                        </Box>
-                    </Form>
-                </Formik>
+                        <Formik
+                            initialValues={{ name: '' }}
+                            onSubmit={async (values, { setSubmitting }) => {
+                                if (!chosenBot) return;
+                                dispatch(setOpening(false));
+                                const res = await createChat({ name: values.name, bot_id: chosenBot });
+                                if (res?.id) {
+                                    idManager.setBotId(chosenBot);
+                                    idManager.setChatId(res.id);
+                                    dispatch(setCurrentChat({
+                                        id: res.id,
+                                        botId: chosenBot,
+                                        name: res.name,
+                                        avatar: res.botAvatar,
+                                        botName: res.botName,
+                                        createdAt: res.createdAt.toString()
+                                    }));
+                                    setSubmitting(false);
+                                    navigate('/chat');
+                                }
+                            }}
+                        >
+                            {({ isSubmitting }) => (
+                                <Form style={{
+                                    margin: 'auto',
+                                    width: '85%',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    gap: '22px'
+                                }}>
+                                    <Field
+                                        as={TextField}
+                                        name="name"
+                                        placeholder="Chat name"
+                                        variant="standard"
+                                        fullWidth
+                                        InputProps={{
+                                            disableUnderline: true,
+                                            style: {
+                                                background: '#26223b',
+                                                borderRadius: 12,
+                                                color: '#fff',
+                                                fontSize: '16px',
+                                                paddingLeft: 14,
+                                                border: `1.5px solid ${ACCENT}`,
+                                                boxShadow: '0 1px 6px #0003'
+                                            }
+                                        }}
+                                        sx={{
+                                            mb: 2,
+                                            input: { color: '#fff' },
+                                            label: { color: '#aaa' }
+                                        }}
+                                    />
+                                    <Box sx={{
+                                        display: 'flex',
+                                        flexDirection: 'row',
+                                        justifyContent: 'center',
+                                        width: '100%',
+                                        gap: 3
+                                    }}>
+                                        <Button
+                                            type="submit"
+                                            variant="contained"
+                                            disabled={!chosenBot || isSubmitting || isCreating}
+                                            sx={{
+                                                background: chosenBot
+                                                    ? `linear-gradient(90deg, ${ACCENT}, #342061)`
+                                                    : '#222',
+                                                color: '#fff',
+                                                fontWeight: 600,
+                                                boxShadow: 'none',
+                                                px: 4,
+                                                py: 1.2,
+                                                borderRadius: '16px',
+                                                fontSize: '16px',
+                                                '&:hover': {
+                                                    background: `linear-gradient(90deg, ${ACCENT_HOVER}, #342061)`,
+                                                }
+                                            }}
+                                        >
+                                            {isCreating || isSubmitting
+                                                ? <CircularProgress size={20} color="inherit" />
+                                                : "Confirm"}
+                                        </Button>
+                                        <Button
+                                            onClick={closeChat}
+                                            variant="text"
+                                            sx={{
+                                                color: ACCENT,
+                                                fontWeight: 500,
+                                                px: 4,
+                                                fontSize: '16px'
+                                            }}
+                                        >
+                                            Cancel
+                                        </Button>
+                                    </Box>
+                                </Form>
+                            )}
+                        </Formik>
+                    </>
+                )}
             </Box>
         </Modal>
     );

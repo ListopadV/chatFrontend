@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ThemeProvider } from '@mui/material'
@@ -10,7 +9,7 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import {BrowserRouter as Router} from "react-router-dom";
 import store, { persistor } from "./store";
-import AppQueryClientProvider from "./QueryClientProvider";
+import { SnackbarProvider } from "notistack";
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -20,14 +19,14 @@ root.render(
   <React.StrictMode>
     <Router>
         <ThemeProvider theme={theme}>
-       <AppQueryClientProvider>
            <PersistGate persistor={persistor}>
                <Provider store={store}>
                    <CssBaseline />
-                   <App />
+                   <SnackbarProvider>
+                       <App />
+                   </SnackbarProvider>
                </Provider>
            </PersistGate>
-       </AppQueryClientProvider>
     </ThemeProvider>
     </Router>
   </React.StrictMode>

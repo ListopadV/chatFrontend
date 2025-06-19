@@ -1,8 +1,17 @@
 import React, { FC } from 'react';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
-import {ErrorSnackbarProps} from "../../types";
 import Typer from "./Typer";
+
+interface Message {
+    message: string,
+    open: boolean
+}
+
+interface ErrorSnackbarProps {
+    setSnack: (arg: Message) => void,
+    snack: Message
+}
 
 const ErrorSnackbar: FC<ErrorSnackbarProps> = ({ snack, setSnack }) => {
     const handleCloseSnackbar = () => {
