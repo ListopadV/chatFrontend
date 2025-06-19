@@ -101,11 +101,12 @@ export const Registration: React.FC = () => {
     <Box
       sx={{
         bgcolor: BG,
-        height: '100vh',
+        minHeight: '100vh',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        pt: 6
+        pt: 6,
+        pb: 5
       }}
     >
       <Typography variant="h4" sx={{ color: ACCENT, fontWeight: 800, letterSpacing: 2 }}>

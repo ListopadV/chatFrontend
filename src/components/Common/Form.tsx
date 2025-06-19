@@ -68,7 +68,7 @@ export const ModularForm: React.FC<ModularFormProps> = ({
       sx={{
         width: { xs: '85vw', sm: '85vw', md: '65vw', lg: '50vw', xl: '50vw' },
         border: '1px solid #231426',
-        mt: 10,
+        mt: 5,
         p: 2,
         maxWidth: '500px',
         textAlign: 'center',
