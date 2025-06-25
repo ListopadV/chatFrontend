@@ -8,23 +8,22 @@ export const requestRegistration = async (data: RegistrationDto): Promise<AuthDt
         const response = await apiClient.post<AuthDto>('/users/registration', data);
         console.log(response)
         return response.data;
-    } catch (err: any){
+    } catch (err: any) {
         console.log(err)
-        if (axios.isAxiosError(err)){
+        if (axios.isAxiosError(err)) {
             const backendMessage = err.response?.data?.message;
             const status = err.response?.status;
 
-            if (status === 409){
+            if (status === 409) {
                 return {
                     message: backendMessage || "User with this email already exists"
                 }
             }
-            if (status === 500){
+            if (status === 500) {
                 return {
                     message: backendMessage || "Internal server error."
                 }
-            }
-            else {
+            } else {
                 return {
                     message: backendMessage || 'Unexpected error.'
                 }

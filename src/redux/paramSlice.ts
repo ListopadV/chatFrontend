@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import {createSlice, PayloadAction} from '@reduxjs/toolkit'
 
 interface ParamsState {
     temperature: number,
@@ -28,6 +28,6 @@ const paramSlice = createSlice({
     }
 });
 
-export const { setTemperature, setTopP, setTokens } = paramSlice.actions;
+export const {setTemperature, setTopP, setTokens} = paramSlice.actions;
 export default paramSlice.reducer;
 

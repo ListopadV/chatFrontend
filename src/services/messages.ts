@@ -12,12 +12,12 @@ const mapMessageDto = (message: MessageDto): MessageEntity => ({
 
 export const fetchMessages = async (): Promise<MessageEntity[] | undefined> => {
     try {
-         const { data: responseData } = await apiClient.get<{messages: MessageDto[]}>('/messages/fetch', {
+        const {data: responseData} = await apiClient.get<{ messages: MessageDto[] }>('/messages/fetch', {
             chatId: true,
             botId: true
         });
         return responseData.messages.map(mapMessageDto);
-    } catch (e){
+    } catch (e) {
         console.error("Error fetching messages:", e);
     }
 }

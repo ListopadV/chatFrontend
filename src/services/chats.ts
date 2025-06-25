@@ -26,7 +26,7 @@ const mapCreatedChatDto = (chat: ResponseCreateChatDto): CreatedChatEntity => ({
 
 export const askBot = async (name: string, data: RequestAskDto): Promise<ResponseAskDto | undefined> => {
     try {
-        const { data: responseData } = await apiClient.post('/chats/ask', data, {
+        const {data: responseData} = await apiClient.post('/chats/ask', data, {
             headers: {
                 'X-name': name,
             },
@@ -37,25 +37,25 @@ export const askBot = async (name: string, data: RequestAskDto): Promise<Respons
             bot_message: responseData.bot_message,
             user_message: responseData.user_message
         }
-    } catch (e){
+    } catch (e) {
         console.error("Error sending message: ", e);
     }
 }
 
 export const fetchChats = async (): Promise<ChatEntity[] | undefined> => {
     try {
-        const { data: responseData } = await apiClient.get<ResponseFetchChatsDto[]>('/chats/user');
+        const {data: responseData} = await apiClient.get<ResponseFetchChatsDto[]>('/chats/user');
         return responseData.map(mapChatDto);
-    } catch (e){
+    } catch (e) {
         console.error("Error fetching chats: ", e)
     }
 }
 
 export const createChat = async (data: RequestCreateChatDto): Promise<CreatedChatEntity | undefined> => {
     try {
-        const { data: responseData } = await apiClient.post<ResponseCreateChatDto>(`/chats/create`, data);
+        const {data: responseData} = await apiClient.post<ResponseCreateChatDto>(`/chats/create`, data);
         return mapCreatedChatDto(responseData);
-    } catch (e){
+    } catch (e) {
         console.error('Error creating chat: ', e);
     }
 }
@@ -63,16 +63,16 @@ export const createChat = async (data: RequestCreateChatDto): Promise<CreatedCha
 export const deleteChat = async (): Promise<void | undefined> => {
     try {
         const chatId = idManager.getChatId();
-        if(!chatId){
+        if (!chatId) {
             return undefined;
         }
         await apiClient.delete(`/chats/${chatId}/delete`);
-    } catch (e){
+    } catch (e) {
         console.error("Error deleting chat: ", e);
     }
 }
 
 export const currentChat = async (chat_id: string): Promise<ChatEntity | undefined> => {
-    const { data } = await apiClient.get<ResponseFetchChatsDto>(`/chats/${chat_id}`);
+    const {data} = await apiClient.get<ResponseFetchChatsDto>(`/chats/${chat_id}`);
     return mapChatDto(data);
 }

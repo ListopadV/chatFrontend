@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import Typer from "./Typer";
@@ -13,9 +13,9 @@ interface ErrorSnackbarProps {
     snack: Message
 }
 
-const ErrorSnackbar: FC<ErrorSnackbarProps> = ({ snack, setSnack }) => {
+const ErrorSnackbar: FC<ErrorSnackbarProps> = ({snack, setSnack}) => {
     const handleCloseSnackbar = () => {
-        setSnack({ ...snack, open: false });
+        setSnack({...snack, open: false});
     };
     return (
         <div>
@@ -23,7 +23,7 @@ const ErrorSnackbar: FC<ErrorSnackbarProps> = ({ snack, setSnack }) => {
                 open={snack.open}
                 autoHideDuration={6000}
                 onClose={handleCloseSnackbar}>
-                <Alert onClose={handleCloseSnackbar} severity="error" sx={{ width: '100%' }}>
+                <Alert onClose={handleCloseSnackbar} severity="error" sx={{width: '100%'}}>
                     <Typer isTypeByLetter={true} duration={2} text={snack.message} component={'p'}></Typer>
                 </Alert>
             </Snackbar>

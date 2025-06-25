@@ -1,42 +1,39 @@
-import axios, {
-  AxiosInstance,
-  AxiosError,
-} from "axios";
-import { tokenManager } from "./tokenManager";
-import { idManager } from "./idManager";
+import axios, {AxiosError, AxiosInstance,} from "axios";
+import {tokenManager} from "./tokenManager";
+import {idManager} from "./idManager";
 import {url} from "../../variables";
 
 const apiClient: AxiosInstance = axios.create({
-  baseURL: url,
-  timeout: 1000000,
-  headers: {
-    "Content-Type": "application/json",
-    Accept: "application/json",
-  }
+    baseURL: url,
+    timeout: 1000000,
+    headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+    }
 });
 
 
 apiClient.interceptors.request.use((config) => {
 
-  const accessToken = tokenManager.getAccessToken();
-  if (accessToken){
-    config.headers.Authorization = `Bearer ${accessToken}`;
-  }
+    const accessToken = tokenManager.getAccessToken();
+    if (accessToken) {
+        config.headers.Authorization = `Bearer ${accessToken}`;
+    }
 
-  if (config.botId) config.headers['X-bot-id'] = idManager.getBotId()
-  if (config.chatId) config.headers["X-chat-id"] = idManager.getChatId()
+    if (config.botId) config.headers['X-bot-id'] = idManager.getBotId()
+    if (config.chatId) config.headers["X-chat-id"] = idManager.getChatId()
 
-  return config;
+    return config;
 });
 
 apiClient.interceptors.response.use(
-  (res) => res,
-  async (error: AxiosError) => {
-    if (error.response?.status === 401) {
-      tokenManager.handleSessionExpiration("unauthorized");
+    (res) => res,
+    async (error: AxiosError) => {
+        if (error.response?.status === 401) {
+            tokenManager.handleSessionExpiration("unauthorized");
+        }
+        return Promise.reject(error);
     }
-    return Promise.reject(error);
-  }
 );
 
 export default apiClient;

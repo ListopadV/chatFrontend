@@ -1,6 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import {MessagesState} from "../Entities/MessageEntities";
-import {MessageEntity} from "../Entities/MessageEntities";
+import {createSlice, PayloadAction} from '@reduxjs/toolkit'
+import {MessageEntity, MessagesState} from "../Entities/MessageEntities";
 
 
 const initialState: MessagesState = {
@@ -14,6 +13,8 @@ const messagesSlice = createSlice({
     reducers: {
         setMessages: (state, action: PayloadAction<MessageEntity[]>) => {
             state.messages = action.payload;
+
+
         },
         addMessage: (state, action: PayloadAction<MessageEntity>) => {
             return {
@@ -53,5 +54,5 @@ const messagesSlice = createSlice({
 //     }
 // }
 
-export const { setMessages, addMessage, clearMessages, setMessageOrder } = messagesSlice.actions;
+export const {setMessages, addMessage, clearMessages, setMessageOrder} = messagesSlice.actions;
 export default messagesSlice.reducer;

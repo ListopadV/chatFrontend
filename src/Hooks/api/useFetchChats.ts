@@ -5,7 +5,7 @@ import {setChats} from "../../redux/chatSlice";
 
 export const useFetchChats = () => {
     const dispatch = useDispatch();
-    const { data, error, isLoading, mutate: refetch} = useSWR(
+    const {data, error, isLoading, mutate: refetch} = useSWR(
         '/fetchChats',
         fetchChats,
         {
@@ -16,5 +16,5 @@ export const useFetchChats = () => {
             }
         }
     )
-    return { data, error, isLoading, refetch }
+    return {data, error, isLoading, refetch}
 }

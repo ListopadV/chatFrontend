@@ -2,34 +2,34 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { ThemeProvider } from '@mui/material'
+import {ThemeProvider} from '@mui/material'
 import CssBaseline from '@mui/material/CssBaseline';
 import theme from "./themeStyle";
-import { Provider } from 'react-redux';
-import { PersistGate } from 'redux-persist/integration/react';
+import {Provider} from 'react-redux';
+import {PersistGate} from 'redux-persist/integration/react';
 import {BrowserRouter as Router} from "react-router-dom";
-import store, { persistor } from "./store";
-import { SnackbarProvider } from "notistack";
+import store, {persistor} from "./store";
+import {SnackbarProvider} from "notistack";
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+    document.getElementById('root') as HTMLElement
 );
 
 root.render(
-  <React.StrictMode>
-    <Router>
-        <ThemeProvider theme={theme}>
-           <PersistGate persistor={persistor}>
-               <Provider store={store}>
-                   <CssBaseline />
-                   <SnackbarProvider>
-                       <App />
-                   </SnackbarProvider>
-               </Provider>
-           </PersistGate>
-    </ThemeProvider>
-    </Router>
-  </React.StrictMode>
+    <React.StrictMode>
+        <Router>
+            <ThemeProvider theme={theme}>
+                <PersistGate persistor={persistor}>
+                    <Provider store={store}>
+                        <CssBaseline/>
+                        <SnackbarProvider>
+                            <App/>
+                        </SnackbarProvider>
+                    </Provider>
+                </PersistGate>
+            </ThemeProvider>
+        </Router>
+    </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

@@ -6,22 +6,22 @@ import {mutate} from "swr";
 import {idManager} from "../../services/auth/idManager";
 
 export const useCreateChat = () => {
-    const { trigger, isMutating } = useSWRMutation<
+    const {trigger, isMutating} = useSWRMutation<
         CreatedChatEntity | undefined,
         any,
         string,
         RequestChatDto
     >(
         '/createChat',
-        async (_key, { arg }) => {
+        async (_key, {arg}) => {
             const res = await createChat(arg);
-            if (res?.id){
-                 idManager.setChatId(res.id);
+            if (res?.id) {
+                idManager.setChatId(res.id);
                 await mutate(['/currentChat', res.id]);
             }
             return res;
         }
     )
 
-    return { createChat: trigger, isCreating: isMutating }
+    return {createChat: trigger, isCreating: isMutating}
 }

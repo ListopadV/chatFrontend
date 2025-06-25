@@ -25,6 +25,8 @@
     ]
   },
   "include": [
-    "src"
+    "src",
+    "globalTypes.d.ts",
+    "declarations.d.ts"
   ]
 }

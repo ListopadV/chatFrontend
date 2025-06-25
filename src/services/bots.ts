@@ -13,10 +13,10 @@ const mapBotDto = (d: BotDto): BotEntity => ({
 
 export const fetchBots = async (): Promise<BotEntity[] | undefined> => {
     try {
-        const { data: responseData } = await apiClient.get<{ bots: BotDto[] }>('/bots/bots')
+        const {data: responseData} = await apiClient.get<{ bots: BotDto[] }>('/bots/bots')
         console.log(responseData)
         return responseData.bots?.map(mapBotDto);
-    } catch (e){
+    } catch (e) {
         console.error("Error fetching bots: ", e);
     }
 }
